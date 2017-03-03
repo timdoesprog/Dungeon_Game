@@ -29,6 +29,30 @@ def clear_screen():
 
 
 
+def draw_map(player):
+    print(" _" * 5)
+    tile = "|{}"
+
+    for cell in CELLS:
+        x, y = cell
+        # for all the cells except the most right one
+        if x < 4:
+            line_end = ""
+            if cell == player:
+                output = tile.format("X")
+            else:
+                output = tile.format("_")
+        # for the last cell on the right
+        else:
+            line_end = "\n"
+            if cell == player:
+                output = tile.format("X|")
+            else:
+                output = tile.format("_|")
+
+        print(output, end=line_end)
+
+
 
 def get_location():
     # picks three unique random positions in the grid
@@ -73,30 +97,34 @@ def get_moves(player):
     return moves
 
 
+def game_loop():
+    # populate the grid
+    monster, door, player = get_location()
 
-# populate the grid
-monster, door, player = get_location()
+    while True:
+        draw_map(player)
+        valid_moves = get_moves(player)
+
+        print("You're currently in room {}".format(player))
+        print("You can move {}".format(", ".join(valid_moves)))
+        print("Enter QUIT to quit.")
+
+        move = input(">> ").upper()
+
+        if move == "QUIT" or move == "Q":
+            break
+
+        if move in valid_moves:
+            player = move_player(player, move)
+        else:
+            input("\n ** Opps, hit a wall! ** \n")
+
+        clear_screen()
 
 
-while True:
-    valid_moves = get_moves(player)
-    clear_screen()
-    print("Welcome to the dungeon!")
-    print("You're currently in room {}".format(player))
-    print("You can move {}".format(", ".join(valid_moves)))
-    print("Enter QUIT to quit.")
-
-    move = input(">> ").upper()
-
-    if move == "QUIT" or move == "Q":
-        break
-
-    if move in valid_moves:
-        player = move_player(player, move)
-    else:
-        print("\n ** Opps, hit a wall! ** \n")
-        continue
 
 
-    # on door = win
-    # on monster = lose
+print("Welcome to the dungeon!")
+input("Press return to Start")
+clear_screen()
+game_loop()
