@@ -1,8 +1,8 @@
 # 03.03.2017
 
+
 import random
 import os
-
 # TODO LIST
 # draw the grid
 # pick random location for player
@@ -99,10 +99,12 @@ def get_moves(player):
 
 
 def game_loop():
-    # populate the grid
+    # populate the variables
     monster, door, player = get_location()
+    playing = True
 
-    while True:
+    while playing:
+        clear_screen()
         draw_map(player)
         valid_moves = get_moves(player)
 
@@ -113,6 +115,7 @@ def game_loop():
         move = input(">> ").upper()
 
         if move == "QUIT" or move == "Q":
+            print("\n ** See you next time. ** \n")
             break
 
         if move in valid_moves:
@@ -120,17 +123,21 @@ def game_loop():
 
             if player == monster:
                 print("\n ** NOOOO! The monster ate you whole. ** \n")
-                break
+                playing = False
 
             if player == door:
                 print("\n ** Congratulations! You escaped the dungeon.** \n")
-                break
-
+                playing = False
 
         else:
             input("\n ** Opps, hit a wall! ** \n")
 
-        clear_screen()
+    # gets executed if now break occurs in the while loop
+    # so when the player either gets eaten by the monster
+    # or finds the door
+    else:
+        if input("Play again? [Y/n]").lower() != "n":
+            game_loop()
 
 
 clear_screen()
