@@ -3,6 +3,7 @@
 import random
 import os
 
+# TODO LIST
 # draw the grid
 # pick random location for player
 # pick random location for exit door
@@ -15,7 +16,7 @@ import os
 
 
 # Grid with 5x5 cells
-# tuples with (x, y)
+# tuples with (x, y) coordinates
 CELLS = [   (0, 0), (1, 0), (2, 0), (3, 0), (4, 0),
             (0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
             (0, 2), (1, 2), (2, 2), (3, 2), (4, 2),
@@ -26,7 +27,6 @@ CELLS = [   (0, 0), (1, 0), (2, 0), (3, 0), (4, 0),
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
-
 
 
 def draw_map(player):
@@ -57,6 +57,7 @@ def draw_map(player):
 def get_location():
     # picks three unique random positions in the grid
     return random.sample(CELLS, 3)
+
 
 def move_player(player, move):
     # get the player's location
@@ -116,15 +117,27 @@ def game_loop():
 
         if move in valid_moves:
             player = move_player(player, move)
+
+            if player == monster:
+                print("\n ** NOOOO! The monster ate you whole. ** \n")
+                break
+
+            if player == door:
+                print("\n ** Congratulations! You escaped the dungeon.** \n")
+                break
+
+
         else:
             input("\n ** Opps, hit a wall! ** \n")
 
         clear_screen()
 
 
-
-
-print("Welcome to the dungeon!")
+clear_screen()
+print("You ended up in a wet and dark dungeon!")
+print("You need to find the room with the exit.")
+print("But beware! A monster lingers in one of the rooms")
+print("and will eat you alive if you come across it.")
 input("Press return to Start")
 clear_screen()
 game_loop()
